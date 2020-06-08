@@ -103,6 +103,7 @@ def convert_xmls_to_cocojson(annotation_paths: List[str],
         output_json_dict['images'].append(img_info)
 
         for obj in ann_root.findall('object'):
+            ann = {}
             try:
                 ann = get_coco_annotation_from_obj(obj=obj, label2id=label2id)
             except ValueError:
