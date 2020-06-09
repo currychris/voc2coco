@@ -42,7 +42,7 @@ def get_image_info(annotation_root, extract_num_from_imgid=True):
     img_name = os.path.basename(filename)
     img_id = os.path.splitext(img_name)[0]
     if extract_num_from_imgid and isinstance(img_id, str):
-        img_id = int(re.findall(r'\d+', img_id)[0])
+        img_id = "".join(re.findall(r'\d+', img_id))
 
     size = annotation_root.find('size')
     width = int(size.findtext('width'))
@@ -62,7 +62,11 @@ def get_coco_annotation_from_obj(obj, label2id):
     assert label in label2id, f"Error: {label} is not in label2id !"
     category_id = label2id[label]
     bndbox = obj.find('bndbox')
-    xmin = int(bndbox.findtext('xmin')) - 1
+    try:
+        xmin = int(bndbox.findtext('xmin')) - 1
+    except ValueError:
+        print(str(bnd.findtext('xmin')))
+        raise
     ymin = int(bndbox.findtext('ymin')) - 1
     xmax = int(bndbox.findtext('xmax'))
     ymax = int(bndbox.findtext('ymax'))
@@ -103,11 +107,7 @@ def convert_xmls_to_cocojson(annotation_paths: List[str],
         output_json_dict['images'].append(img_info)
 
         for obj in ann_root.findall('object'):
-            ann = {}
-            try:
-                ann = get_coco_annotation_from_obj(obj=obj, label2id=label2id)
-            except ValueError:
-                print('error on '+str(img_id))
+            ann = get_coco_annotation_from_obj(obj=obj, label2id=label2id)
             ann.update({'image_id': img_id, 'id': bnd_id})
             output_json_dict['annotations'].append(ann)
             bnd_id = bnd_id + 1
