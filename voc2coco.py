@@ -65,7 +65,7 @@ def get_coco_annotation_from_obj(obj, label2id):
     try:
         xmin = int(bndbox.findtext('xmin')) - 1
     except ValueError:
-        print(str(bnd.findtext('xmin')))
+        print(str(bndbox.findtext('xmin')))
         raise
     ymin = int(bndbox.findtext('ymin')) - 1
     xmax = int(bndbox.findtext('xmax'))
