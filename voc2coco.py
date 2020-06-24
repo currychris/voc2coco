@@ -34,11 +34,9 @@ def get_annpaths(ann_dir_path: str = None,
 
 
 def get_image_info(annotation_root, extract_num_from_imgid=True):
-    path = annotation_root.findtext('path')
-    if path is None:
-        filename = annotation_root.findtext('filename')
-    else:
-        filename = os.path.basename(path)
+    filename = annotation_root.findtext('filename')
+    if filename is None:
+        filename = os.path.basename(annotation_root.findtext('path'))
     img_name = os.path.basename(filename)
     img_id = os.path.splitext(img_name)[0]
     if extract_num_from_imgid and isinstance(img_id, str):
