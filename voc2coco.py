@@ -50,7 +50,7 @@ def get_image_info(annotation_root, extract_num_from_imgid=True):
         'file_name': filename,
         'height': height,
         'width': width,
-        'id': img_id
+        'id': int(img_id)
     }
     return image_info
 
